@@ -1,0 +1,19 @@
+{
+  "name": "gulp-happiness",
+  "version": "0.0.0",
+  "description": "gulp plugin for happiness",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dutchenkoOleg/gulp-happiness.git"
+  },
+  "author": "Oleg Dutchenko <dutchenko.o.wezom@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dutchenkoOleg/gulp-happiness/issues"
+  },
+  "homepage": "https://github.com/dutchenkoOleg/gulp-happiness#readme"
+}
