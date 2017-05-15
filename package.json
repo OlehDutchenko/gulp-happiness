@@ -1,6 +1,6 @@
 {
   "name": "gulp-happiness",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/dutchenkoOleg/gulp-happiness/issues"
   },
-  "homepage": "https://github.com/dutchenkoOleg/gulp-happiness#readme"
+  "homepage": "https://github.com/dutchenkoOleg/gulp-happiness#readme",
+  "dependencies": {
+    "happiness": "^7.1.2"
+  },
+  "devDependencies": {
+    "gulp": "github:gulpjs/gulp#4.0"
+  }
 }
