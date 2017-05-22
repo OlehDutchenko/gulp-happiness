@@ -1,6 +1,6 @@
 {
   "name": "gulp-happiness",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "dependencies": {
     "gulp-util": "^3.0.8",
     "happiness": "^7.1.2",
+    "lodash.clonedeep": "^4.5.0",
     "through2": "^2.0.3"
   },
   "devDependencies": {
