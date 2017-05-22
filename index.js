@@ -3,7 +3,7 @@
 /**
  * [Gulp](http://gulpjs.com/) plugin for [happiness](https://github.com/JedWatson/happiness)
  * @module gulp-happiness
- * 
+ *
  * @author Oleg Dutchenko <dutchenko.o.wezom@gmail.com>
  * @version 0.0.4
  */
@@ -17,8 +17,6 @@ const gutil = require('gulp-util');
 const through2 = require('through2');
 const happiness = require('happiness');
 const _cloneDeep = require('lodash.clonedeep');
-
-
 
 // ----------------------------------------
 // Private helpers
@@ -46,14 +44,15 @@ const terminalLogger = console.warn;
 function pluginLogger () {
 	let args = arguments;
 	let sampleData = args[0] || '';
+	let nonStringData = typeof sampleData !== 'string';
 
-	if (typeof sampleData !== 'string') {
+	if (nonStringData) {
 		args.shift();
 	}
 
 	gutil.log(...args);
-	
-	if (sampleData) {
+
+	if (nonStringData) {
 		terminalLogger(sampleData);
 	}
 }
@@ -92,50 +91,14 @@ const defaultFormatters = [
 ];
 
 /**
- * Get formatter for report
- * @param {string|function} [formatter='stylish']
- * @param {object} [options]
- * @private
- * @sourceCode
- */
-function pluginReporter (formatter = 'stylish', options) {
-	// execute and return formatter fn
-	if (typeof formatter === 'function') {
-		return formatter(options);
-	}
-
-	// get formatter from node modules
-	if (!formatter && typeof formatter === 'string') {
-		let formatterPath = formatter;
-		
-		// default
-		if (defaultFormatters.indexOf(formatter) >= 0) {
-			formatterPath = path.join(
-				'happiness/node_modules/eslint/lib/formatters',
-				formatter
-			);
-		}
-		
-		try {
-			let formatterModule = require(formatterPath);
-			return formatterModule(options);
-		} catch (err) {
-			pluginError('Streams are not supported!');
-		}
-	}
-
-	pluginError('formatter must be function or string');
-}
-
-/**
  * [FW] Send to linting
  * @param {Object} [options]
  * @return {Function}
  */
-function bufferReader(options) {
+function bufferReader (options) {
 	const runOptions = _cloneDeep(options);
 
-	return function(file, enc, cb) {
+	return function (file, enc, cb) {
 		// check
 		if (file.isNull()) {
 			pluginLogger(file, 'null file');
@@ -146,12 +109,12 @@ function bufferReader(options) {
 			pluginLogger(file);
 			return cb(pluginError('Streams are not supported!'));
 		}
-		
+
 		if (!file.contents.length) {
 			pluginLogger(file, 'No content');
 			return cb(null, file);
 		}
-		
+
 		// lint
 		let fileContent = file.contents.toString(enc);
 
@@ -162,28 +125,102 @@ function bufferReader(options) {
 			file.happiness = data;
 			cb(null, file);
 		});
-	}
+	};
+}
+
+/**
+ * Get formatter for report
+ * @param {string|function} [formatter='stylish']
+ * @param {object} [options]
+ * @return {Function}
+ * @private
+ * @sourceCode
+ */
+function bufferFormatter (formatter, options) {
+	return function (file) {
+		let cb = arguments[2];
+		let data = file.happiness;
+
+		if (typeof data !== 'object' || data === null) {
+			cb(null, file);
+		}
+		if (typeof formatter === 'function') {
+			formatter(data, options);
+			cb(null, file);
+		}
+
+		if (!formatter || typeof formatter === 'string') {
+			let yellow = gutil.colors.yellow
+
+			if (data.errorCount <= 0) {
+				pluginLogger(yellow('Congratulations, your code is happy!'));
+				pluginLogger(yellow('************************************'));
+				return cb(null, file);
+			}
+
+			let formatterPath = formatter;
+
+			if (defaultFormatters.indexOf(formatter) >= 0) {
+				formatterPath = path.join(
+					'happiness/node_modules/eslint/lib/formatters',
+					formatter
+				);
+			}
+
+			try {
+				let formatterModule = require(formatterPath);
+				let result = formatterModule(data.results, options);
+
+				if (result && typeof result === 'string') {
+					console.warn(yellow(`> ${file.path}`));
+					console.warn(result);
+				}
+
+				return cb(null, file);
+			} catch (err) {
+				cb(pluginError(err));
+			}
+		}
+	};
 }
 
 /**
  * Lookup for errors and fail if has one
- * @param {Buffer} file
- * @param {string} enc
- * @param {function} cb
- * @return {*}
+ * @param {object} [options]
+ * @return {Function}
+ * @private
+ * @sourceCode
  */
-function bufferErrors (file, enc, cb) {
-	let data = file.happiness || null;
-	
-	if (data === null) {
+function bufferErrors (options) {
+	return function (file) {
+		let data = file.happiness || null;
+		let cb = arguments[2];
+
+		if (options.disabled) {
+			return cb(null, file);
+		}
+
+		if (data === null) {
+			return cb(null, file);
+		}
+
+		if (data.errorCount) {
+			let red = gutil.colors.red;
+			let s = ' ';
+			let errorMsgList = [
+				red(`errorCount ${data.errorCount}`),
+				red('================================='),
+				red(' ')
+			];
+
+			let errorMsg = errorMsgList.join(`\n${s + s + s + s}`);
+
+			return cb(pluginError(errorMsg));
+		}
+
 		return cb(null, file);
 	}
-	
-	console.warn( data );
-	return cb(null, file);
 }
-
-
 
 // ----------------------------------------
 // Public
@@ -192,19 +229,19 @@ function bufferErrors (file, enc, cb) {
 /**
  * @param userOptions
  * @returns {DestroyableTransform} through2.obj
- * @sourceCode +7
+ * @sourceCode +10
  */
 function gulpHappiness (userOptions) {
 	return through2.obj(bufferReader(userOptions));
 }
 
-gulpHappiness.reporter = pluginReporter;
-gulpHappiness.name = pluginName;
-gulpHappiness.failOnError = function() {
-	return through2.obj(bufferErrors);
+gulpHappiness.format = function (formatter = 'stylish', options) {
+	return through2.obj(bufferFormatter(formatter, options));
 };
 
-
+gulpHappiness.failOnError = function (options) {
+	return through2.obj(bufferErrors(options));
+};
 
 // ----------------------------------------
 // Exports
