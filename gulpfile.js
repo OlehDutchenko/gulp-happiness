@@ -23,8 +23,8 @@ const gulpHappiness = require('./index');
 gulp.task('lint', function() {
 	return gulp.src('./*.js')
 		.pipe(gulpHappiness())
-		.pipe(gulpHappiness.format())
-		.pipe(gulpHappiness.failOnError({
-			disabled: true
-		}));
+		// .pipe(gulpHappiness.format({
+		// 	showHappyFiles: true
+		// }))
+		// .pipe(gulpHappiness.failAfterErrors());
 });
