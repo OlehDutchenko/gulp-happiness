@@ -15,19 +15,22 @@
 const gulp = require('gulp');
 const gulpHappiness = require('./index');
 
-
 // ----------------------------------------
 // Exports
 // ----------------------------------------
 
-gulp.task('lint', function() {
-	return gulp.src([
+gulp.task('lint', function () {
+	let sources = [
 		'./*.js',
-		'./tmp/*.js'
-	])
-		.pipe(gulpHappiness())
-		// .pipe(gulpHappiness.format({
-		// 	showHappyFiles: true
-		// }))
-		// .pipe(gulpHappiness.failAfterErrors());
+		'./node_modules/gulp-not-supported-file/*.js'
+	];
+
+	return gulp.src(sources)
+		.pipe(gulpHappiness({
+			noUnderscore: false
+		}))
+		.pipe(gulpHappiness.format({
+			showHappyFiles: true,
+			noUnderscore: false
+		}));
 });

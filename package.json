@@ -1,6 +1,6 @@
 {
   "name": "gulp-happiness",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
@@ -23,14 +23,14 @@
     "gulp-util": "^3.0.8",
     "happiness": "^7.1.2",
     "lodash.clonedeep": "^4.5.0",
-    "lodash.isarray": "^4.0.0",
+    "lodash.isfunction": "^3.0.8",
     "lodash.isplainobject": "^4.0.6",
+    "lodash.isstring": "^4.0.1",
     "through2": "^2.0.3"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
     "gulp": "github:gulpjs/gulp#4.0",
-    "mocha": "^3.4.1",
+    "gulp-mocha": "^4.3.1",
     "should": "^11.2.1"
   }
 }
