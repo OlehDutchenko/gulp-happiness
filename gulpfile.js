@@ -21,7 +21,10 @@ const gulpHappiness = require('./index');
 // ----------------------------------------
 
 gulp.task('lint', function() {
-	return gulp.src('./*.js')
+	return gulp.src([
+		'./*.js',
+		'./tmp/*.js'
+	])
 		.pipe(gulpHappiness())
 		// .pipe(gulpHappiness.format({
 		// 	showHappyFiles: true

@@ -19,6 +19,8 @@ const _isArray = require('lodash.isarray');
 const _cloneDeep = require('lodash.clonedeep');
 const _isPlainObject = require('lodash.isplainobject');
 
+const notSupportedFile = require('gulp-not-supported-file');
+
 // ----------------------------------------
 // Helpers
 // ----------------------------------------
@@ -29,67 +31,6 @@ const _isPlainObject = require('lodash.isplainobject');
  * @private
  */
 const pluginName = 'gulp-happiness';
-
-/**
- * Allow console log if `false`
- * @type {boolean}
- * @private
- */
-let silent = false;
-
-/**
- * Checking if silent mode turned on
- * @param {Object} [options={}]
- */
-function setSilent(options={}) {
-	if (_isPlainObject(options)) {
-		silent = !!options.silent;
-	} else {
-		silent = false;
-	}
-}
-
-/**
- * Custom log method
- * @param {*} args
- */
-function consoleLog (...args) {
-	if (silent !== true) {
-		console.log(...args);
-	}
-}
-
-/**
- * [FW] Colored console log, based on `gutil.colors`
- * @param {string} keyword
- * @return {Function}
- * @private
- * @sourceCode
- */
-function colorLog(keyword) {
-	let list = [
-		'yellow',
-		'red',
-		'blue',
-		'magenta',
-		'white',
-		'black',
-		'cyan',
-		'gray',
-		'green'
-	];
-	let color = list.indexOf(keyword) >= 0 ? gutil.colors[keyword] :  gutil.colors['white'] ;
-	
-	return function(...args) {
-		let msg = color(args.join(' '));
-
-		consoleLog(msg);
-	}
-}
-
-const yellowLog = colorLog('yellow');
-const greenLog = colorLog('green');
-const redLog = colorLog('red');
 
 /**
  * Plugin error constructor
@@ -103,40 +44,6 @@ function pluginError (sample, options) {
 	return new gutil.PluginError(pluginName, sample, options);
 }
 
-/**
- * Checking if file is supported for processing  
- * returns `false` if supported
- * returns `Array` if not supported
- * @param {Object} file
- * @param {boolean} [breakImmediately]
- * @return {boolean|Array}
- */
-function notSupportedFile (file, breakImmediately) {
-	if (breakImmediately) {
-		return [null, file];
-	}
-
-	if (file.isNull()) {
-		yellowLog('WARN ! file isNull');
-		consoleLog(file);
-		return [];
-	}
-
-	if (file.isStream()) {
-		redLog('ERROR ! Streams are not supported!');
-		consoleLog(file);
-		return [pluginError('Streams are not supported!')];
-	}
-
-	if (!file.contents.length) {
-		yellowLog('WARN ! No file content');
-		consoleLog(file);
-		return [null, file];
-	}
-	
-	return false;
-}
-
 // ----------------------------------------
 // Public
 // ----------------------------------------
@@ -147,14 +54,13 @@ function notSupportedFile (file, breakImmediately) {
  */
 function gulpHappiness (options={}) {
 	let runOptions = _cloneDeep(options);
-	
-	setSilent(runOptions);
-	
+
 	return through2.obj(function (file,...args) {
 		let cb = args[1];
-		let notSupported = notSupportedFile(file);
-		
-		if (_isArray(notSupported)) {
+		let notSupported = notSupportedFile(file, pluginError);
+
+		if (notSupported) {
+			notSupported.shift();
 			return cb(...notSupported);
 		}
 
