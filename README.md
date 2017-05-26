@@ -12,6 +12,8 @@
 
 ---
 
+![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/connot-auto-fix.png)
+
 ## Installing
 
 ```shell

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * [Gulp](http://gulpjs.com/) plugin for [happiness](https://github.com/JedWatson/happiness)
+ * Gulp plugin for happiness
  * @module
  * @author Oleg Dutchenko <dutchenko.o.dev@gmail.com>
  */
@@ -142,26 +142,32 @@ function gulpHappiness (options = {}) {
 
 		if (fixProblems) {
 			happiness.eslintConfig.fix = true;
+			happiness.lintFiles([file.path], lintOptions, function (err, data) {
+				if (err) {
+					return cb(pluginError(err));
+				}
+
+				let output = data.results && data.results[0] && data.results[0].output;
+
+				if (typeof output === 'string') {
+					file.contents = Buffer.from(output, enc);
+				}
+				if (data.errorCount > 0) {
+					console.log(gutil.colors.yellow(`\nCannot auto fix ${file.path}\nDo it yourself manual\n`));
+				}
+				file.eslint = data;
+				cb(null, file);
+			});
+			return;
 		}
 
 		happiness.lintText(String(file.contents), lintOptions, function (err, data) {
 			if (err) {
 				return cb(pluginError(err));
 			}
-
 			data.results.forEach(result => {
 				result.filePath = file.path;
 			});
-
-			if (fixProblems) {
-				let output = data.results[0].output;
-				if (data.errorCount === 0 && typeof output === 'string') {
-					file.contents = Buffer.from(output, enc);
-				} else {
-					console.log(gutil.colors.yellow(`\nCannot auto fix ${file.path}\nDo it yourself manual\n`));
-				}
-			}
-
 			file.eslint = data;
 			cb(null, file);
 		});
@@ -236,7 +242,6 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 			if (isDefault) {
 				formatterPath = defaultFormatter;
 			}
-
 			if (fromList) {
 				formatterPath = path.join(eslintFormattersFolder, formatter);
 			}
