@@ -296,10 +296,6 @@ gulpHappiness.failOnError = function (options = {}) {
 			return cb(...eslintData);
 		}
 
-		if (runOptions.disabled) {
-			return cb(null, file);
-		}
-
 		if (eslintData.errorCount === 0) {
 			if (_isFunction(runOptions.onEnd)) {
 				runOptions.onEnd(null, eslintData);
@@ -323,6 +319,11 @@ gulpHappiness.failOnError = function (options = {}) {
 		if (_isFunction(runOptions.onEnd)) {
 			runOptions.onEnd(errorMsg, eslintData);
 		}
+
+		if (runOptions.disabled) {
+			return cb(null, file);
+		}
+
 		return cb(pluginError(errorMsg));
 	});
 };
@@ -351,10 +352,6 @@ gulpHappiness.failAfterError = function (options = {}) {
 		if (Array.isArray(eslintData)) {
 			eslintData.shift();
 			return cb(...eslintData);
-		}
-
-		if (runOptions.disabled) {
-			return cb();
 		}
 
 		if (eslintData.errorCount === 0) {
@@ -386,9 +383,15 @@ gulpHappiness.failAfterError = function (options = {}) {
 		if (eslintIsFormatted !== false) {
 			errorMsg += moreInfo;
 		}
+
 		if (_isFunction(runOptions.onEnd)) {
 			runOptions.onEnd(errorMsg, allErrorsCount, filePaths);
 		}
+
+		if (runOptions.disabled) {
+			return cb();
+		}
+
 		cb(pluginError(errorMsg));
 	});
 };

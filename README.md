@@ -1,9 +1,8 @@
 # gulp-happiness
 
-![Work in progress](https://img.shields.io/badge/Status-WIP-red.svg)
 ![npm](https://img.shields.io/badge/node-6.3.1-yellow.svg)
 [![es2015](https://img.shields.io/badge/ECMAScript-2015_(ES6)-blue.svg)](https://nodejs.org/en/docs/es6/)
-[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)
+[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)[![Build Status](https://travis-ci.org/dutchenkoOleg/gulp-happiness.svg?branch=master)](https://travis-ci.org/dutchenkoOleg/gulp-happiness)
 
 > _Gulp plugin for [happiness](https://www.npmjs.com/package/happiness)_
 
@@ -78,6 +77,23 @@ gulp.task('lint', function () {
 ---
 
 ## API
+
+- [gulpHappiness()](#gulpHappiness)
+- [gulpHappiness(options)](#gulphappinessoptions)
+
+
+- [gulpHappiness.format()](#gulphappinessformat)
+- [gulpHappiness.format(formatterName)](#gulphappinessformatformattername)
+- [gulpHappiness.format(formatterFunction)](#gulphappinessformatformatterfunction)
+- [gulpHappiness.format(formatterName/formatterFunction, options)](#gulphappinessformatformatternameformatterfunction-options)
+
+
+- [gulpHappiness.failOnError()](#gulphappinessfailonerror)
+- [gulpHappiness.failOnError(options)](#gulphappinessfailonerroroptions)
+
+
+- [gulpHappiness.failAfterError()](#gulphappinessfailaftererror)
+- [gulpHappiness.failAfterError(options)](#gulphappinessfailaftererroroptions)
 
 ### gulpHappiness()
 
@@ -257,7 +273,7 @@ gulp.task('lint', function () {
 
 #### formatterName/formatterFunction
 
-see above [formatterName](#formattername) and [formatterFunction](#formatterfunction)
+see above [formatterName](#formattername) and [formatterFunction](#formatterfunctionresults-formatteroptions)
 
 
 #### options.formatterOptions
@@ -299,7 +315,7 @@ _No explicit configuration._
 
 type `boolean` /
 default `undefined`  
-Skip fail check out 
+Not fail on errors 
 
 #### options.onEnd(errorMsg, eslintData)
 
@@ -369,6 +385,11 @@ Same as [gulpHappiness(options) → options.noEmpty](#optionsnoempty)
 #### options.silent
 
 Same as [gulpHappiness(options) → options.silent](#optionssilent)
+
+## Tests
+
+1. `npm test` for testing code style and run mocha tests
+1. `npm run happiness-fix` for automatically fix most of problems with code style 
 
 ## Changelog
 

@@ -1,10 +1,11 @@
 {
   "name": "gulp-happiness",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
-    "test": "happiness --verbose | snazzy"
+    "test": "happiness \"./*.js\" --verbose | snazzy && gulp",
+    "happiness-fix": "happiness \"./*.js\" --fix | snazzy"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "del": "^2.2.2",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-mocha": "^4.3.1",
     "multipipe": "^1.0.2",
