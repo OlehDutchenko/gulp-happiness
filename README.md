@@ -111,7 +111,7 @@ Options for [happiness](https://www.npmjs.com/package/happiness) linter
 
 type `Array.<string>` /
 default `undefined`  
-Custom global variables to declare
+Custom global variables to declare (e.g. `['jquery', '$']`)
 
 #### options.linterOptions.plugins  
 
@@ -129,7 +129,7 @@ Custom eslint environment
 
 type `string` /
 default `undefined`  
-Custom js parser (e.g. babel-eslint)
+Custom js parser (e.g. `'babel-eslint'`)
 
 #### options.noUnderscore
 
@@ -198,6 +198,8 @@ gulp.task('lint', function () {
 ```
 
 ### gulpHappiness.format(formatterFunction)
+
+#### formatterFunction
 	
 type `function`  
 You can use own function or existing formatters as function (https://www.npmjs.com/search?q=eslint+formatter)
@@ -245,6 +247,11 @@ gulp.task('lint', function () {
 
 ### gulpHappiness.format(formatterName/formatterFunction, options)
 
+#### formatterName/formatterFunction
+
+see above [formatterName](#formattername) and [formatterFunction](#formatterfunction)
+
+
 #### options.formatterOptions
 
 type `Object` /
@@ -273,6 +280,91 @@ Same as [gulpHappiness(options) → options.noEmpty](#optionsnoempty)
 
 Same as [gulpHappiness(options) → options.silent](#optionssilent)
 
+
+### gulpHappiness.failOnError()
+
+_No explicit configuration._ 
+
+### gulpHappiness.failOnError(options)
+
+#### options.disabled
+
+type `boolean` /
+default `undefined`  
+Skip fail check out 
+
+#### options.onEnd(errorMsg, eslintData)
+
+type `fucnction` /
+default `undefined`  
+Skip fail check out 
+
+
+_Parameters:_
+
+Name | Data type | Description
+ --- | --- | ---
+ `errorMsg` | `null/string` | Is `null` if no errors were found and is `string` if errors were found. String contains a short message about errors
+ `eslintData` | `nObject` | eslint data from file
+ 
+Its call will be before ending of pipe. So you don't need apply no callbacks or return some values.  
+You can use it for own custom actions, e.g rewrite some globals.  
+___Note!___ if options.disabled - is `true` - this function will not be called
+
+
+#### options.noUnderscore
+
+Same as [gulpHappiness(options) → options.noUnderscore](#optionsnounderscore)
+
+#### options.noEmpty
+
+Same as [gulpHappiness(options) → options.noEmpty](#optionsnoempty)
+
+#### options.silent
+
+Same as [gulpHappiness(options) → options.silent](#optionssilent)
+
+
+### gulpHappiness.failAfterError()
+
+_No explicit configuration._ 
+
+### gulpHappiness.failAfterError(options)
+
+#### options.disabled
+
+Same as [gulpHappiness.failOnError(options) → options.disabled](#optionsdisabled)
+
+#### options.onEnd(errorMsg, errorFilesPaths, allErrorsCount)
+
+type `fucnction` /
+default `undefined`  
+Skip fail check out 
+
+
+_Parameters:_
+
+Name | Data type | Description
+ --- | --- | ---
+ `errorMsg` | `null/string` | Is `null` if no errors were found and is `string` if errors were found. String contains a short message about errors
+ `errorFilesPaths` | `Array` | Array of files with errors. It will an empty if no files.
+ `allErrorsCount` | `number` | Count of all errors. Will be 0 if no errors
+ 
+Its call will be before ending of pipe. So you don't need apply no callbacks or return some values.  
+You can use it for own custom actions, e.g rewrite some globals.  
+___Note!___ if options.disabled - is `true` - this function will not be called
+
+#### options.noUnderscore
+
+Same as [gulpHappiness(options) → options.noUnderscore](#optionsnounderscore)
+
+#### options.noEmpty
+
+Same as [gulpHappiness(options) → options.noEmpty](#optionsnoempty)
+
+#### options.silent
+
+Same as [gulpHappiness(options) → options.silent](#optionssilent)
 
 ## Changelog
 

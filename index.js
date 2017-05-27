@@ -296,7 +296,14 @@ gulpHappiness.failOnError = function (options = {}) {
 			return cb(...eslintData);
 		}
 
+		if (runOptions.disabled) {
+			return cb(null, file);
+		}
+
 		if (eslintData.errorCount === 0) {
+			if (_isFunction(runOptions.onEnd)) {
+				runOptions.onEnd(null, eslintData);
+			}
 			return cb(null, file);
 		}
 
@@ -313,6 +320,9 @@ gulpHappiness.failOnError = function (options = {}) {
 			errorMsg += moreInfo;
 		}
 
+		if (_isFunction(runOptions.onEnd)) {
+			runOptions.onEnd(errorMsg, eslintData);
+		}
 		return cb(pluginError(errorMsg));
 	});
 };
@@ -343,6 +353,10 @@ gulpHappiness.failAfterError = function (options = {}) {
 			return cb(...eslintData);
 		}
 
+		if (runOptions.disabled) {
+			return cb();
+		}
+
 		if (eslintData.errorCount === 0) {
 			return cb();
 		}
@@ -359,6 +373,9 @@ gulpHappiness.failAfterError = function (options = {}) {
 		cb();
 	}, function (cb) {
 		if (allErrorsCount === 0) {
+			if (_isFunction(runOptions.onEnd)) {
+				runOptions.onEnd(null, allErrorsCount, filePaths);
+			}
 			return cb();
 		}
 
@@ -368,6 +385,9 @@ gulpHappiness.failAfterError = function (options = {}) {
 
 		if (eslintIsFormatted !== false) {
 			errorMsg += moreInfo;
+		}
+		if (_isFunction(runOptions.onEnd)) {
+			runOptions.onEnd(errorMsg, allErrorsCount, filePaths);
 		}
 		cb(pluginError(errorMsg));
 	});
