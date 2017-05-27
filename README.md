@@ -1,8 +1,9 @@
 # gulp-happiness
 
 ![npm](https://img.shields.io/badge/node-6.3.1-yellow.svg)
-[![es2015](https://img.shields.io/badge/ECMAScript-2015_(ES6)-blue.svg)](https://nodejs.org/en/docs/es6/)
-[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)[![Build Status](https://travis-ci.org/dutchenkoOleg/gulp-happiness.svg?branch=master)](https://travis-ci.org/dutchenkoOleg/gulp-happiness)
+[![es2015](https://img.shields.io/badge/ECMAScript-2015_(ES6)-blue.svg)](https://nodejs.org/en/docs/es6/) 
+[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/dutchenkoOleg/gulp-happiness.svg?branch=master)](https://travis-ci.org/dutchenkoOleg/gulp-happiness)
 
 > _Gulp plugin for [happiness](https://www.npmjs.com/package/happiness)_
 

@@ -1,6 +1,6 @@
 {
   "name": "gulp-happiness",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,13 @@
     "url": "https://github.com/dutchenkoOleg/gulp-happiness/issues"
   },
   "homepage": "https://github.com/dutchenkoOleg/gulp-happiness#readme",
+  "keywords": [
+    "code-style",
+    "happiness",
+    "gulp-plugin",
+    "linter",
+    "javascript"
+  ],
   "dependencies": {
     "eslint": "^3.19.0",
     "eslint-formatter-pretty": "^1.1.0",
