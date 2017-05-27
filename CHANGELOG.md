@@ -6,6 +6,14 @@
 > _This project adheres to [Semantic Versioning](http://semver.org/)._
 
 
+### [0.3.0] - 2017-05-27
+
+#### Added
+
+- API descriptions
+- npm tests
+- [Travis CI](https://travis-ci.org/dutchenkoOleg/gulp-not-supported-file) builds
+
 ### [0.2.0] - 2017-05-26
 
 #### Added

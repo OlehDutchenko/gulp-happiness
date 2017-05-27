@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * [Gulp](http://gulpjs.com/) plugin for [happiness](https://github.com/JedWatson/happiness)
+ * Gulp plugin for [happiness](https://github.com/JedWatson/happiness)
  * @module
  * @author Oleg Dutchenko <dutchenko.o.dev@gmail.com>
  */
@@ -125,6 +125,10 @@ function getEslintData (file, pluginError, runOptions = {}) {
 function gulpHappiness (options = {}) {
 	let runOptions = _cloneDeep(options);
 
+	if (!_isPlainObject(runOptions.linterOptions)) {
+		runOptions.linterOptions = {};
+	}
+
 	return through2.obj(function (file, enc, cb) {
 		let notSupported = notSupportedFile(file, pluginError, {
 			silent: runOptions.silent,
@@ -137,31 +141,42 @@ function gulpHappiness (options = {}) {
 			return cb(...notSupported);
 		}
 
-		let lintOptions = _cloneDeep(runOptions.linter || {});
 		let fixProblems = runOptions.fix;
+		let lintOptions = {
+			globals: runOptions.linterOptions.globals,
+			plugins: runOptions.linterOptions.plugins,
+			envs: runOptions.linterOptions.envs,
+			parser: runOptions.linterOptions.parser
+		};
 
 		if (fixProblems) {
 			happiness.eslintConfig.fix = true;
+			happiness.lintFiles([file.path], lintOptions, function (err, data) {
+				if (err) {
+					return cb(pluginError(err));
+				}
+
+				let output = data.results && data.results[0] && data.results[0].output;
+
+				if (typeof output === 'string') {
+					file.contents = Buffer.from(output, enc);
+				}
+				if (data.errorCount > 0) {
+					console.log(gutil.colors.yellow(`\nCannot auto fix ${file.path}\nDo it yourself manual\n`));
+				}
+				file.eslint = data;
+				cb(null, file);
+			});
+			return;
 		}
 
 		happiness.lintText(String(file.contents), lintOptions, function (err, data) {
 			if (err) {
 				return cb(pluginError(err));
 			}
-
 			data.results.forEach(result => {
 				result.filePath = file.path;
 			});
-
-			if (fixProblems) {
-				let output = data.results[0].output;
-				if (data.errorCount === 0 && typeof output === 'string') {
-					file.contents = Buffer.from(output, enc);
-				} else {
-					console.log(gutil.colors.yellow(`\nCannot auto fix ${file.path}\nDo it yourself manual\n`));
-				}
-			}
-
 			file.eslint = data;
 			cb(null, file);
 		});
@@ -223,27 +238,28 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 		}
 
 		if (_isFunction(formatter)) {
-			formatter(eslintData, runOptions);
+			let output = formatter(eslintData.results, runOptions.formatterOptions);
+
+			console.log(output);
 			file.eslintIsFormeated = true;
 			return cb(null, file);
 		}
 
 		if (_isString(formatter)) {
 			let formatterPath = formatter;
-			let isDefault = !formatter || formatter === 'default';
+			let isDefault = !formatter || formatter === 'default' || formatter === defaultFormatter;
 			let fromList = !isDefault && eslintFormattersList.indexOf(formatter) >= 0;
 
 			if (isDefault) {
 				formatterPath = defaultFormatter;
 			}
-
 			if (fromList) {
 				formatterPath = path.join(eslintFormattersFolder, formatter);
 			}
 
 			try {
 				let formatterModule = require(formatterPath);
-				let result = formatterModule(eslintData.results);
+				let result = formatterModule(eslintData.results, runOptions.formatterOptions);
 
 				console.log(gutil.colors.red(`SAD FILE > ${file.path}`));
 				console.log(result);
@@ -281,6 +297,9 @@ gulpHappiness.failOnError = function (options = {}) {
 		}
 
 		if (eslintData.errorCount === 0) {
+			if (_isFunction(runOptions.onEnd)) {
+				runOptions.onEnd(null, eslintData);
+			}
 			return cb(null, file);
 		}
 
@@ -295,6 +314,14 @@ gulpHappiness.failOnError = function (options = {}) {
 
 		if (file.eslintIsFormeated !== true) {
 			errorMsg += moreInfo;
+		}
+
+		if (_isFunction(runOptions.onEnd)) {
+			runOptions.onEnd(errorMsg, eslintData);
+		}
+
+		if (runOptions.disabled) {
+			return cb(null, file);
 		}
 
 		return cb(pluginError(errorMsg));
@@ -343,6 +370,9 @@ gulpHappiness.failAfterError = function (options = {}) {
 		cb();
 	}, function (cb) {
 		if (allErrorsCount === 0) {
+			if (_isFunction(runOptions.onEnd)) {
+				runOptions.onEnd(null, allErrorsCount, filePaths);
+			}
 			return cb();
 		}
 
@@ -353,6 +383,15 @@ gulpHappiness.failAfterError = function (options = {}) {
 		if (eslintIsFormatted !== false) {
 			errorMsg += moreInfo;
 		}
+
+		if (_isFunction(runOptions.onEnd)) {
+			runOptions.onEnd(errorMsg, allErrorsCount, filePaths);
+		}
+
+		if (runOptions.disabled) {
+			return cb();
+		}
+
 		cb(pluginError(errorMsg));
 	});
 };
