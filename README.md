@@ -75,6 +75,8 @@ gulp.task('lint', function () {
 });
 ```
 
+---
+
 ## API
 
 ### gulpHappiness()
@@ -100,6 +102,42 @@ _Example of log:_
 
 ![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/connot-auto-fix.png)
 
+#### options.linterOptions
+
+type `Object` /
+default `undefined`
+
+Options for the chosen formatter 
+
+#### options.linterOptions.globals  
+
+type `Array.<string>` /
+default `undefined`
+
+Custom global variables to declare
+
+#### options.linterOptions.plugins  
+
+type `Array.<string>` /
+default `undefined`
+
+Custom eslint plugins
+
+#### options.linterOptions.envs  
+
+type `Array.<string>` /
+default `undefined`
+
+Custom eslint environment
+
+#### options.linterOptions.parser  
+
+type `string` /
+default `undefined`
+
+Custom eslint environment
+
+Custom js parser (e.g. babel-eslint)
 
 #### options.noUnderscore
 
@@ -220,15 +258,35 @@ gulp.task('lint', function () {
 
 ### gulpHappiness.format(formatterName/formatterFunction, options)
 
+#### options.formatterOptions
+
+type `Object` /
+default `undefined`
+
+Options for the chosen formatter 
+
+#### options.showHappyFiles
+
+type `boolean` /
+default `undefined`
+
+Show files without problems in console
+
+_Example of log:_
+
+![Show happy files example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/show-hapy-files.png)
+
 #### options.noUnderscore
 
-same as gulpHappiness(options) → options.noUnderscore
+Same as [gulpHappiness(options) → options.noUnderscore](#optionsnounderscore)
 
 #### options.noEmpty
 
-same as gulpHappiness(options) → options.noEmpty
+Same as [gulpHappiness(options) → options.noEmpty](#optionsnoempty)
 
-![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/show-hapy-files.png)
+#### options.silent
+
+Same as [gulpHappiness(options) → options.silent](#optionssilent)
 
 
 ## Changelog

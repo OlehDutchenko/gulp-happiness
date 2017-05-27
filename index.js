@@ -125,6 +125,10 @@ function getEslintData (file, pluginError, runOptions = {}) {
 function gulpHappiness (options = {}) {
 	let runOptions = _cloneDeep(options);
 
+	if (!_isPlainObject(runOptions.linterOptions)) {
+		runOptions.linterOptions = {};
+	}
+
 	return through2.obj(function (file, enc, cb) {
 		let notSupported = notSupportedFile(file, pluginError, {
 			silent: runOptions.silent,
@@ -137,8 +141,13 @@ function gulpHappiness (options = {}) {
 			return cb(...notSupported);
 		}
 
-		let lintOptions = runOptions.linterOptions;
 		let fixProblems = runOptions.fix;
+		let lintOptions = {
+			globals: runOptions.linterOptions.globals,
+			plugins: runOptions.linterOptions.plugins,
+			envs: runOptions.linterOptions.envs,
+			parser: runOptions.linterOptions.parser
+		};
 
 		if (fixProblems) {
 			happiness.eslintConfig.fix = true;
