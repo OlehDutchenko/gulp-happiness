@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Gulp plugin for happiness
+ * Gulp plugin for [happiness](https://github.com/JedWatson/happiness)
  * @module
  * @author Oleg Dutchenko <dutchenko.o.dev@gmail.com>
  */
@@ -137,7 +137,7 @@ function gulpHappiness (options = {}) {
 			return cb(...notSupported);
 		}
 
-		let lintOptions = null;
+		let lintOptions = runOptions.linterOptions;
 		let fixProblems = runOptions.fix;
 
 		if (fixProblems) {
@@ -229,7 +229,7 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 		}
 
 		if (_isFunction(formatter)) {
-			formatter(eslintData, runOptions);
+			formatter(eslintData.results, runOptions.formatterOptions);
 			file.eslintIsFormeated = true;
 			return cb(null, file);
 		}
@@ -248,7 +248,7 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 
 			try {
 				let formatterModule = require(formatterPath);
-				let result = formatterModule(eslintData.results);
+				let result = formatterModule(eslintData.results, runOptions.formatterOptions);
 
 				console.log(gutil.colors.red(`SAD FILE > ${file.path}`));
 				console.log(result);

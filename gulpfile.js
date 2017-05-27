@@ -1,9 +1,8 @@
 'use strict';
 
 /**
- * [Gulp](http://gulpjs.com/) plugin for [happiness](https://github.com/JedWatson/happiness)
- * @module gulp-happiness
- * @author Oleg Dutchenko <dutchenko.o.wezom@gmail.com>
+ * @fileOverview Testing with `gulp-mocha`
+ * @author Oleg Dutchenko <dutchenko.o.dev@gmail.com>
  */
 
 // ----------------------------------------

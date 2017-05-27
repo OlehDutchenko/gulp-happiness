@@ -95,16 +95,6 @@ _Example of log:_
 
 ![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/connot-auto-fix.png)
 
-#### options.noEmpty
-
-type `boolean` /
-default `true`
-
-File with empty content will be skipped and not using in stream next.  
-_You will receive message in console if it happens_
-
-_**Note!** Spaces, tabs and newlines will be treated as empty content._  
-
 
 #### options.noUnderscore
 
@@ -112,7 +102,25 @@ type `boolean` /
 default `true`
 
 File which name starts with _ (underscore) will be skipped and not using in stream next.  
-_You will receive message in console if it happens_ 
+
+_You will receive message in console if it happens_  
+_Example of log:_
+
+![no-empty log example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-not-supported-file/master/assets/no-underscore.png)
+
+
+#### options.noEmpty
+
+type `boolean` /
+default `true`
+
+File with empty content will be skipped and not using in stream next.  
+_**Note!** Spaces, tabs and newlines will be treated as empty content._  
+
+_You will receive message in console if it happens_  
+_Example of log:_
+
+![no-empty log example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-not-supported-file/master/assets/no-empty.png)
 
 
 #### options.silent
@@ -128,7 +136,7 @@ _No explicit configuration._
 Outputs the lint results to the console.  
 Default formatter is [`eslint-formatter-pretty`](https://www.npmjs.com/package/eslint-formatter-pretty)
 
-### gulpHappiness.format(formatterName, options)
+### gulpHappiness.format(formatterName)
 
 #### formatterName
 
@@ -157,6 +165,12 @@ gulp.task('lint', function () {
 		.pipe(gulpHappiness.format('eslint-friendly-formatter'))
 });
 ```
+
+### gulpHappiness.format(formatterFunction)
+	
+type `function`
+
+
 
 
 
