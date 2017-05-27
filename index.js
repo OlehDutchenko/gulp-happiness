@@ -137,7 +137,7 @@ function gulpHappiness (options = {}) {
 			return cb(...notSupported);
 		}
 
-		let lintOptions = {};
+		let lintOptions = null;
 		let fixProblems = runOptions.fix;
 
 		if (fixProblems) {
@@ -236,7 +236,7 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 
 		if (_isString(formatter)) {
 			let formatterPath = formatter;
-			let isDefault = !formatter || formatter === 'default';
+			let isDefault = !formatter || formatter === 'default' || formatter === defaultFormatter;
 			let fromList = !isDefault && eslintFormattersList.indexOf(formatter) >= 0;
 
 			if (isDefault) {

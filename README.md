@@ -30,7 +30,7 @@ const gulpHappiness = require('gulp-happiness');
 
 gulp.task('lint', function () {
 	return gulp.src(['**/*.js','!node_modules/**'])
-		// attaches the lint data to the "eslint" property
+		// Attaches the lint data to the "eslint" property
 		// of the file object so it can be used by other modules. 
 		// By default it will skip files with empty content
 		// and if filename starts with _ (underscore)
@@ -73,6 +73,11 @@ gulp.task('lint', function () {
 
 ## API
 
+### gulpHappiness()
+
+Linting with default options.  
+Attaches the lint data to the "eslint" property of the file object so it can be used by other modules. 
+
 ### gulpHappiness(options)
 
 #### options.fix
@@ -80,7 +85,7 @@ gulp.task('lint', function () {
 type `boolean` /
 default `undefined`
 
-Fix most issues automatically.
+Fix most issues automatically if set `true`.
 
 *__Note!__ It will not fix original file in your fs.  
 It fix files in stream and you must save them where you need by using `gulp.dest()`  after linting*
@@ -107,7 +112,51 @@ type `boolean` /
 default `true`
 
 File which name starts with _ (underscore) will be skipped and not using in stream next.  
-_You will receive message in console if it happens_
+_You will receive message in console if it happens_ 
+
+
+#### options.silent
+
+type `boolean` /
+default `undefined`
+
+No logs about `noEmpty` and `noUnderscore` files
+
+### gulpHappiness.format()
+
+_No explicit configuration._   
+Outputs the lint results to the console.  
+Default formatter is [`eslint-formatter-pretty`](https://www.npmjs.com/package/eslint-formatter-pretty)
+
+### gulpHappiness.format(formatterName, options)
+
+#### formatterName
+
+type `string`
+
+You can use formatter by default  
+`gulpHappiness.format('default')` - same as `gulpHappiness.format()`  
+
+or use one of the [ESLint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters),  
+for example `gulpHappiness.format('stylish')` 
+
+or use some else formatter which you can install from npm (https://www.npmjs.com/search?q=eslint+formatter)  
+for example
+
+```shell
+npm i --save eslint-friendly-formatter
+```
+
+```js
+const gulp = require('gulp');
+const gulpHappiness = require('gulp-happiness');
+
+gulp.task('lint', function () {
+	return gulp.src(['**/*.js','!node_modules/**'])
+		.pipe(gulpHappiness())
+		.pipe(gulpHappiness.format('eslint-friendly-formatter'))
+});
+```
 
 
 
