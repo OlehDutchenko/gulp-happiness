@@ -5,8 +5,7 @@
 [![es2015](https://img.shields.io/badge/ECMAScript-2015_(ES6)-blue.svg)](https://nodejs.org/en/docs/es6/)
 [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)
 
-> _Gulp plugin for [happiness](https://www.npmjs.com/package/happiness)_  
-> ___Coming Soon___
+> _Gulp plugin for [happiness](https://www.npmjs.com/package/happiness)_
 
 [![js-happiness-style](https://cdn.rawgit.com/JedWatson/happiness/master/badge.svg)](https://github.com/JedWatson/happiness)
 
@@ -35,8 +34,10 @@ gulp.task('lint', function () {
 		// By default it will skip files with empty content
 		// and if filename starts with _ (underscore)
 		.pipe(gulpHappiness())
+		
 		// eslint.format() outputs the lint results to the console.
 		.pipe(gulpHappiness.format())
+		
 		// Look after checking all the streamed files,
 		// and if at least one of them has errors it will fail.
 		// Note! This method does not transfer files further to the stream!
@@ -58,14 +59,17 @@ gulp.task('lint', function () {
 		.pipe(gulpHappiness({
 			fix: true
 		}))
+		
 		// Show in console happy files ;)
 		.pipe(gulpHappiness.format({
 			showHappyFiles: true
 		}))
+		
 		// Failing if file has eslint errors,
 		// it will break task immediately.
 		// Current file and all next not will be transferred
 		.pipe(gulpHappiness.failOnError())
+		
 		// transfer files
 		.pipe(gulp.dest('./dist/assets/js/'));
 });
@@ -75,6 +79,7 @@ gulp.task('lint', function () {
 
 ### gulpHappiness()
 
+_No explicit configuration._   
 Linting with default options.  
 Attaches the lint data to the "eslint" property of the file object so it can be used by other modules. 
 
@@ -87,10 +92,10 @@ default `undefined`
 
 Fix most issues automatically if set `true`.
 
-*__Note!__ It will not fix original file in your fs.  
+*__Note!__ It will not fix original files in your fs.  
 It fix files in stream and you must save them where you need by using `gulp.dest()`  after linting*
 
-*__Note!__ If auto fixing cannot be done - you will see message in console about it*  
+*__Note!__ If auto fixing cannot be done - you will see message in console about it.*  
 _Example of log:_
 
 ![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/connot-auto-fix.png)
@@ -103,7 +108,7 @@ default `true`
 
 File which name starts with _ (underscore) will be skipped and not using in stream next.  
 
-_You will receive message in console if it happens_  
+_You will receive message in console if it happens._  
 _Example of log:_
 
 ![no-empty log example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-not-supported-file/master/assets/no-underscore.png)
@@ -117,7 +122,7 @@ default `true`
 File with empty content will be skipped and not using in stream next.  
 _**Note!** Spaces, tabs and newlines will be treated as empty content._  
 
-_You will receive message in console if it happens_  
+_You will receive message in console if it happens._  
 _Example of log:_
 
 ![no-empty log example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-not-supported-file/master/assets/no-empty.png)
@@ -170,8 +175,60 @@ gulp.task('lint', function () {
 	
 type `function`
 
+You can use own function or existing formatters as function (https://www.npmjs.com/search?q=eslint+formatter)
 
+___Note!___ Function will receive results array from  eslint data for formatting.   
+And return output as string if has problems in received results for console.
 
+_Example with custom formatter function_
+
+```js
+const gulp = require('gulp');
+const gulpHappiness = require('gulp-happiness');
+
+gulp.task('lint', function () {
+	return gulp.src(['**/*.js','!node_modules/**'])
+		.pipe(gulpHappiness())
+		.pipe(gulpHappiness.format(function(results, formatterOptions={}) {
+			// process results and options
+			// ...
+			
+			let output = myOwnMethodForTransformResults(results, transformOptions);
+			
+			return output;
+		}))
+});
+```
+
+_Example with custom formatter function_
+
+```shell
+npm i --save eslint-friendly-formatter
+```
+
+```js
+const gulp = require('gulp');
+const gulpHappiness = require('gulp-happiness');
+const eslintFriendlyFormatter = require('eslint-friendly-formatter');
+
+gulp.task('lint', function () {
+	return gulp.src(['**/*.js','!node_modules/**'])
+		.pipe(gulpHappiness())
+		.pipe(gulpHappiness.format(eslintFriendlyFormatter))
+});
+```
+
+### gulpHappiness.format(formatterName/formatterFunction, options)
+
+#### options.noUnderscore
+
+same as gulpHappiness(options) → options.noUnderscore
+
+#### options.noEmpty
+
+same as gulpHappiness(options) → options.noEmpty
+
+![Cannot auto fix example](https://raw.githubusercontent.com/dutchenkoOleg/gulp-happiness/master/assets/show-hapy-files.png)
 
 
 ## Changelog

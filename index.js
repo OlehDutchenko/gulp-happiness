@@ -229,7 +229,9 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 		}
 
 		if (_isFunction(formatter)) {
-			formatter(eslintData.results, runOptions.formatterOptions);
+			let output = formatter(eslintData.results, runOptions.formatterOptions);
+
+			console.log(output);
 			file.eslintIsFormeated = true;
 			return cb(null, file);
 		}

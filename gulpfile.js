@@ -33,7 +33,7 @@ gulp.task('lint', function (done) {
 			gulpHappiness.failOnError()
 		))
 		.on('error', function (err) {
-			console.log(String(err) );
+			console.log(String(err));
 			done();
 		})
 		.pipe(gulp.dest('results'));
@@ -49,11 +49,11 @@ gulp.task('lint-fix', function (done) {
 			gulpHappiness({
 				fix: true
 			}),
-			gulpHappiness.format()
-			// gulpHappiness.failOnError()
+			gulpHappiness.format(),
+			gulpHappiness.failOnError()
 		))
 		.on('error', function (err) {
-			console.log(String(err) );
+			console.log(String(err));
 			done();
 		})
 		.pipe(gulp.dest('results'));
