@@ -137,7 +137,7 @@ function gulpHappiness (options = {}) {
 			return cb(...notSupported);
 		}
 
-		let lintOptions = _cloneDeep(runOptions.linter || {});
+		let lintOptions = {};
 		let fixProblems = runOptions.fix;
 
 		if (fixProblems) {
