@@ -90,8 +90,7 @@ Attaches the lint data to the "eslint" property of the file object so it can be 
 #### options.fix
 
 type `boolean` /
-default `undefined`
-
+default `undefined`  
 Fix most issues automatically if set `true`.
 
 *__Note!__ It will not fix original files in your fs.  
@@ -105,45 +104,37 @@ _Example of log:_
 #### options.linterOptions
 
 type `Object` /
-default `undefined`
-
-Options for the chosen formatter 
+default `undefined`  
+Options for [happiness](https://www.npmjs.com/package/happiness) linter
 
 #### options.linterOptions.globals  
 
 type `Array.<string>` /
-default `undefined`
-
+default `undefined`  
 Custom global variables to declare
 
 #### options.linterOptions.plugins  
 
 type `Array.<string>` /
-default `undefined`
-
+default `undefined`  
 Custom eslint plugins
 
 #### options.linterOptions.envs  
 
 type `Array.<string>` /
-default `undefined`
-
+default `undefined`  
 Custom eslint environment
 
 #### options.linterOptions.parser  
 
 type `string` /
-default `undefined`
-
-Custom eslint environment
-
+default `undefined`  
 Custom js parser (e.g. babel-eslint)
 
 #### options.noUnderscore
 
 type `boolean` /
-default `true`
-
+default `true`  
 File which name starts with _ (underscore) will be skipped and not using in stream next.  
 
 _You will receive message in console if it happens._  
@@ -155,8 +146,7 @@ _Example of log:_
 #### options.noEmpty
 
 type `boolean` /
-default `true`
-
+default `true`  
 File with empty content will be skipped and not using in stream next.  
 _**Note!** Spaces, tabs and newlines will be treated as empty content._  
 
@@ -169,8 +159,7 @@ _Example of log:_
 #### options.silent
 
 type `boolean` /
-default `undefined`
-
+default `undefined`  
 No logs about `noEmpty` and `noUnderscore` files
 
 ### gulpHappiness.format()
@@ -183,8 +172,7 @@ Default formatter is [`eslint-formatter-pretty`](https://www.npmjs.com/package/e
 
 #### formatterName
 
-type `string`
-
+type `string`  
 You can use formatter by default  
 `gulpHappiness.format('default')` - same as `gulpHappiness.format()`  
 
@@ -211,8 +199,7 @@ gulp.task('lint', function () {
 
 ### gulpHappiness.format(formatterFunction)
 	
-type `function`
-
+type `function`  
 You can use own function or existing formatters as function (https://www.npmjs.com/search?q=eslint+formatter)
 
 ___Note!___ Function will receive results array from  eslint data for formatting.   
@@ -261,15 +248,13 @@ gulp.task('lint', function () {
 #### options.formatterOptions
 
 type `Object` /
-default `undefined`
-
+default `undefined`  
 Options for the chosen formatter 
 
 #### options.showHappyFiles
 
 type `boolean` /
-default `undefined`
-
+default `undefined`  
 Show files without problems in console
 
 _Example of log:_
