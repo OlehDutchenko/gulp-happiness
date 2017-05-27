@@ -199,9 +199,17 @@ gulp.task('lint', function () {
 
 ### gulpHappiness.format(formatterFunction)
 
-#### formatterFunction
+#### formatterFunction(results[, formatterOptions])
+
+type `function`
+
+_Parameters:_
+
+Name | Data type | Description
+ --- | --- | ---
+ `results` | `Array` | Results of eslint
+ `formatterOptions` | `Object/undefined` | Options for formatter
 	
-type `function`  
 You can use own function or existing formatters as function (https://www.npmjs.com/search?q=eslint+formatter)
 
 ___Note!___ Function will receive results array from  eslint data for formatting.   
@@ -297,15 +305,13 @@ Skip fail check out
 
 type `fucnction` /
 default `undefined`  
-Skip fail check out 
-
 
 _Parameters:_
 
 Name | Data type | Description
  --- | --- | ---
  `errorMsg` | `null/string` | Is `null` if no errors were found and is `string` if errors were found. String contains a short message about errors
- `eslintData` | `nObject` | eslint data from file
+ `eslintData` | `Object` | eslint data from file
  
 Its call will be before ending of pipe. So you don't need apply no callbacks or return some values.  
 You can use it for own custom actions, e.g rewrite some globals.  
@@ -339,8 +345,6 @@ Same as [gulpHappiness.failOnError(options) → options.disabled](#optionsdisabl
 
 type `fucnction` /
 default `undefined`  
-Skip fail check out 
-
 
 _Parameters:_
 
