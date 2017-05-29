@@ -4,6 +4,7 @@
 [![es2015](https://img.shields.io/badge/ECMAScript-2015_(ES6)-blue.svg)](https://nodejs.org/en/docs/es6/) 
 [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/dutchenkoOleg/gulp-happiness/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/dutchenkoOleg/gulp-happiness.svg?branch=master)](https://travis-ci.org/dutchenkoOleg/gulp-happiness)
+[![Dependencies](https://www.versioneye.com/user/projects/592bb907a8a056006137f481/badge.svg?style=flat)](https://www.versioneye.com/user/projects/592bb907a8a056006137f481?child=summary)
 
 > _Gulp plugin for [happiness](https://www.npmjs.com/package/happiness)_
 
@@ -79,8 +80,9 @@ gulp.task('lint', function () {
 
 ## API
 
-- [gulpHappiness()](#gulpHappiness)
+- [gulpHappiness()](#gulphappiness)
 - [gulpHappiness(options)](#gulphappinessoptions)
+
 
 
 - [gulpHappiness.format()](#gulphappinessformat)
@@ -89,8 +91,10 @@ gulp.task('lint', function () {
 - [gulpHappiness.format(formatterName/formatterFunction, options)](#gulphappinessformatformatternameformatterfunction-options)
 
 
+
 - [gulpHappiness.failOnError()](#gulphappinessfailonerror)
 - [gulpHappiness.failOnError(options)](#gulphappinessfailonerroroptions)
+
 
 
 - [gulpHappiness.failAfterError()](#gulphappinessfailaftererror)
@@ -111,7 +115,7 @@ default `undefined`
 Fix most issues automatically if set `true`.
 
 *__Note!__ It will not fix original files in your fs.  
-It fix files in stream and you must save them where you need by using `gulp.dest()`  after linting*
+It will fix files in stream and you must save them where you need by using `gulp.dest()`  after linting*
 
 *__Note!__ If auto fixing cannot be done - you will see message in console about it.*  
 _Example of log:_
@@ -196,8 +200,8 @@ You can use formatter by default
 or use one of the [ESLint-provided formatters](https://github.com/eslint/eslint/tree/master/lib/formatters),  
 for example `gulpHappiness.format('stylish')` 
 
-or use some else formatter which you can install from npm (https://www.npmjs.com/search?q=eslint+formatter)  
-for example
+or use some else formatter which you can install from npm [https://www.npmjs.com/search?q=eslint+formatter](https://www.npmjs.com/search?q=eslint+formatter)  
+_Example_
 
 ```shell
 npm i --save eslint-friendly-formatter
@@ -227,10 +231,10 @@ Name | Data type | Description
  `results` | `Array` | Results of eslint
  `formatterOptions` | `Object/undefined` | Options for formatter
 	
-You can use own function or existing formatters as function (https://www.npmjs.com/search?q=eslint+formatter)
+You can use own function or existing formatters as function [https://www.npmjs.com/search?q=eslint+formatter](https://www.npmjs.com/search?q=eslint+formatter)
 
 ___Note!___ Function will receive results array from  eslint data for formatting.   
-And return output as string if has problems in received results for console.
+And it is must return output as string if has problems in received results for console or some negative value, e.g. `null | undefined | false | '' `.
 
 _Example with custom formatter function_
 
@@ -252,7 +256,7 @@ gulp.task('lint', function () {
 });
 ```
 
-_Example with custom formatter function_
+_Example with installed formatter function_
 
 ```shell
 npm i --save eslint-friendly-formatter
@@ -332,7 +336,7 @@ Name | Data type | Description
  
 Its call will be before ending of pipe. So you don't need apply no callbacks or return some values.  
 You can use it for own custom actions, e.g rewrite some globals.  
-___Note!___ if options.disabled - is `true` - this function will not be called
+___Note!___ Even if `options.disabled` - is `true` - this function will be called
 
 
 #### options.noUnderscore
@@ -373,7 +377,7 @@ Name | Data type | Description
  
 Its call will be before ending of pipe. So you don't need apply no callbacks or return some values.  
 You can use it for own custom actions, e.g rewrite some globals.  
-___Note!___ if options.disabled - is `true` - this function will not be called
+___Note!___ Even if `options.disabled` - is `true` - this function will be called
 
 #### options.noUnderscore
 
