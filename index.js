@@ -217,10 +217,6 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 		'visualstudio'
 	];
 
-	if (runOptions.silent) {
-		runOptions.showHappyFiles = false;
-	}
-
 	return through2.obj(function (file, ...args) {
 		let cb = args[1];
 		let eslintData = getEslintData(file, pluginError, runOptions);

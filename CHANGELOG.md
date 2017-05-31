@@ -4,6 +4,14 @@
 
 > _All notable changes to this project will be documented in this file._  
 > _This project adheres to [Semantic Versioning](http://semver.org/)._
+1.0.3 
+
+---
+
+### [1.0.3] - 2017-05-31
+
+#### Fixed
+- `silent` property incorrect influence
 
 ---
 
