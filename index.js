@@ -129,7 +129,7 @@ function gulpHappiness (options = {}) {
 		runOptions.linterOptions = {};
 	}
 
-	return through2.obj(function (file, enc, cb) {
+	return through2.obj(function (file, enc, isDone) {
 		let notSupported = notSupportedFile(file, pluginError, {
 			silent: runOptions.silent,
 			noUnderscore: runOptions.noUnderscore,
@@ -138,7 +138,7 @@ function gulpHappiness (options = {}) {
 
 		if (Array.isArray(notSupported)) {
 			notSupported.shift();
-			return cb(...notSupported);
+			return isDone(...notSupported);
 		}
 
 		let fixProblems = runOptions.fix;
@@ -151,9 +151,11 @@ function gulpHappiness (options = {}) {
 
 		if (fixProblems) {
 			happiness.eslintConfig.fix = true;
+			lintOptions.fix = true;
+			console.log(lintOptions);
 			happiness.lintFiles([file.path], lintOptions, function (err, data) {
 				if (err) {
-					return cb(pluginError(err));
+					return isDone(pluginError(err));
 				}
 
 				let output = data.results && data.results[0] && data.results[0].output;
@@ -165,20 +167,20 @@ function gulpHappiness (options = {}) {
 					console.log(gutil.colors.yellow(`\nCannot auto fix ${file.path}\nDo it yourself manual\n`));
 				}
 				file.eslint = data;
-				cb(null, file);
+				isDone(null, file);
 			});
 			return;
 		}
 
 		happiness.lintText(String(file.contents), lintOptions, function (err, data) {
 			if (err) {
-				return cb(pluginError(err));
+				return isDone(pluginError(err));
 			}
 			data.results.forEach(result => {
 				result.filePath = file.path;
 			});
 			file.eslint = data;
-			cb(null, file);
+			isDone(null, file);
 		});
 	});
 }
@@ -218,19 +220,19 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 	];
 
 	return through2.obj(function (file, ...args) {
-		let cb = args[1];
+		let isDone = args[1];
 		let eslintData = getEslintData(file, pluginError, runOptions);
 
 		if (Array.isArray(eslintData)) {
 			eslintData.shift();
-			return cb(...eslintData);
+			return isDone(...eslintData);
 		}
 
 		if (eslintData.errorCount + eslintData.warningCount === 0) {
 			if (runOptions.showHappyFiles) {
 				console.log(gutil.colors.green(`HAPPY FILE > ${file.path}`));
 			}
-			return cb(null, file);
+			return isDone(null, file);
 		}
 
 		if (_isFunction(formatter)) {
@@ -238,7 +240,7 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 
 			console.log(output);
 			file.eslintIsFormeated = true;
-			return cb(null, file);
+			return isDone(null, file);
 		}
 
 		if (_isString(formatter)) {
@@ -260,13 +262,13 @@ gulpHappiness.format = function (formatter = 'default', options = {}) {
 				console.log(gutil.colors.red(`SAD FILE > ${file.path}`));
 				console.log(result);
 				file.eslintIsFormeated = true;
-				return cb(null, file);
+				return isDone(null, file);
 			} catch (err) {
-				return cb(pluginError(err));
+				return isDone(pluginError(err));
 			}
 		}
 
-		return cb(pluginError(`Error! No suitable formatter - ${formatter}`));
+		return isDone(pluginError(`Error! No suitable formatter - ${formatter}`));
 	});
 };
 
@@ -283,20 +285,20 @@ gulpHappiness.failOnError = function (options = {}) {
 	let runOptions = _cloneDeep(options);
 
 	return through2.obj(function (file, ...args) {
-		let cb = args[1];
+		let isDone = args[1];
 		let filePaths = [];
 		let eslintData = getEslintData(file, pluginError, runOptions);
 
 		if (Array.isArray(eslintData)) {
 			eslintData.shift();
-			return cb(...eslintData);
+			return isDone(...eslintData);
 		}
 
 		if (eslintData.errorCount === 0) {
 			if (_isFunction(runOptions.onEnd)) {
 				runOptions.onEnd(null, eslintData);
 			}
-			return cb(null, file);
+			return isDone(null, file);
 		}
 
 		eslintData.results.forEach(result => {
@@ -317,10 +319,10 @@ gulpHappiness.failOnError = function (options = {}) {
 		}
 
 		if (runOptions.disabled) {
-			return cb(null, file);
+			return isDone(null, file);
 		}
 
-		return cb(pluginError(errorMsg));
+		return isDone(pluginError(errorMsg));
 	});
 };
 
@@ -342,16 +344,16 @@ gulpHappiness.failAfterError = function (options = {}) {
 	let filePaths = [];
 
 	return through2.obj(function (file, ...args) {
-		let cb = args[1];
+		let isDone = args[1];
 		let eslintData = getEslintData(file, pluginError, runOptions);
 
 		if (Array.isArray(eslintData)) {
 			eslintData.shift();
-			return cb(...eslintData);
+			return isDone(...eslintData);
 		}
 
 		if (eslintData.errorCount === 0) {
-			return cb();
+			return isDone();
 		}
 
 		eslintIsFormatted = file.eslintIsFormeated;
@@ -363,13 +365,13 @@ gulpHappiness.failAfterError = function (options = {}) {
 			filePaths.push(`has ${count} ${errorText} in ${result.filePath}`);
 		});
 
-		cb();
-	}, function (cb) {
+		isDone();
+	}, function (isDone) {
 		if (allErrorsCount === 0) {
 			if (_isFunction(runOptions.onEnd)) {
 				runOptions.onEnd(null, allErrorsCount, filePaths);
 			}
-			return cb();
+			return isDone();
 		}
 
 		let errorText = getErrorText(allErrorsCount);
@@ -385,10 +387,10 @@ gulpHappiness.failAfterError = function (options = {}) {
 		}
 
 		if (runOptions.disabled) {
-			return cb();
+			return isDone();
 		}
 
-		cb(pluginError(errorMsg));
+		isDone(pluginError(errorMsg));
 	});
 };
 

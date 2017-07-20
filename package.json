@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "happiness \"./*.js\" --verbose | snazzy && gulp",
-    "happiness-fix": "happiness \"./*.js\" --fix | snazzy"
+    "fix": "happiness \"./*.js\" --fix | snazzy"
   },
   "repository": {
     "type": "git",
@@ -37,6 +37,7 @@
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
     "del": "^3.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-mocha": "^4.3.1",
