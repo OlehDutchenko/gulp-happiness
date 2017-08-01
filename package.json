@@ -1,10 +1,10 @@
 {
   "name": "gulp-happiness",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
-    "test": "happiness \"./*.js\" --verbose | snazzy && gulp",
+    "test": "happiness \"./*.js\" --verbose | snazzy",
     "fix": "happiness \"./*.js\" --fix | snazzy"
   },
   "repository": {

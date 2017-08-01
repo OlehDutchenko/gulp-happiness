@@ -8,9 +8,17 @@
 
 ---
 
+### [2.0.1] - 2017-08-01
+
+Clear console.log
+
+---
+
 ### [2.0.0] - 2017-07-20
 
 Updating with accordance `happiness@10.x` version
+
+---
 
 ### [1.0.3] - 2017-05-31
 

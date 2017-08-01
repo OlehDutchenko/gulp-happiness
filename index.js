@@ -152,7 +152,6 @@ function gulpHappiness (options = {}) {
 		if (fixProblems) {
 			happiness.eslintConfig.fix = true;
 			lintOptions.fix = true;
-			console.log(lintOptions);
 			happiness.lintFiles([file.path], lintOptions, function (err, data) {
 				if (err) {
 					return isDone(pluginError(err));
