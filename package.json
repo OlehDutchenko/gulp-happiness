@@ -1,6 +1,6 @@
 {
   "name": "gulp-happiness",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Gulp plugin for happiness",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,9 @@
     "javascript"
   ],
   "dependencies": {
-    "eslint": "^4.2.0",
-    "eslint-formatter-pretty": "^1.1.0",
-    "gulp-not-supported-file": "^1.2.0",
+    "eslint": "^4.11.0",
+    "eslint-formatter-pretty": "^1.3.0",
+    "gulp-not-supported-file": "^1.2.1",
     "gulp-util": "^3.0.8",
     "happiness": "^10.0.2",
     "lodash.clonedeep": "^4.5.0",
